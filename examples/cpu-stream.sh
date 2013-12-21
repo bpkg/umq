@@ -90,10 +90,15 @@ while true; do
   esac
 done
 
-"${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -1 | {
+"${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -2 | {
   while read -r n; do
-    printf "%1.f\n" `echo "$n * 100" | bc`
-    sleep .5
+    case "$n" in
+      **[0-9]**)
+        v="`echo \"$n * 100\" | bc`"
+        printf "%1.f\n" "$v"
+        sleep .5
+        ;;
+    esac
   done
 };
 
