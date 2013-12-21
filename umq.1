@@ -1,0 +1,86 @@
+.\" Generated with Ronnjs 0.3.8
+.\" http://github.com/kapouer/ronnjs/
+.
+.TH "UMQ" "1" "December 2013" "" ""
+.
+.SH "NAME"
+\fBumq\fR \-\- tcp/udp message transport utility
+.
+.SH "SYNOPSIS"
+\fBumq\fR <command> [\-hV]
+.
+.SH "OPTIONS"
+  \fB\-h, \-\-help\fR              display this message
+  \fB\-V, \-\-version\fR           output version
+.
+.SH "COMMANDS"
+  Push a message to a host with port
+.
+.P
+  \fB$ umq push <host> <port>\fR
+.
+.P
+  Receive a message on a host with port
+.
+.P
+  \fB$ umq recv <host> <port>\fR
+.
+.P
+  Display help on a command
+.
+.P
+  \fB$ umq help push\fR
+.
+.SH "EXAMPLES"
+  \fB$ echo "hello world" | umq push localhost 3000\fR
+.
+.P
+  \fB
+  $ umq recv localhost 3000 | { \\
+      while read line; do \\
+        echo "msg: $line"; \\
+      done; \\
+     }
+  \fR
+.
+.SH "USAGE"
+.
+.SS "RECEIVING"
+\fB
+$ umq recv localhost 3000 | { \\
+  while read \-r line; do \\
+    printf "got: \'%s\\n"; \\
+  done; \\
+}\fR
+.
+.SS "PUSHING"
+\fB
+$ echo "ping" | umq push localhost 3000\fR
+.
+.P
+\fB
+got: \'ping\'\fR
+.
+.SH "AUTHOR"
+.
+.IP "\(bu" 4
+Joseph Werle \fIjoseph\.werle@gmail\.com\fR
+.
+.IP "" 0
+.
+.SH "REPORTING BUGS"
+.
+.IP "\(bu" 4
+https://github\.com/jwerle/umq/issues
+.
+.IP "" 0
+.
+.SH "SEE ALSO"
+.
+.IP "\(bu" 4
+https://github\.com/jwerle/umq
+.
+.IP "" 0
+.
+.SH "LICENSE"
+  MIT (C) Copyright Joseph Werle 2013
