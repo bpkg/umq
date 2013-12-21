@@ -20,7 +20,6 @@ usage () {
     echo "  -u, --user <user>       filter on user"
     echo "  -f, --filter <pattern>  grep pattern syntax to filter"
     echo "  -c, --column <column>   a csv of columns for \`ps' (default: pcpu)"
-    echo "  -r, --run               run as continuous process"
     echo "  -v, --verbose           show verbose output"
     echo "  -h, --help              display this message"
     echo "  -V, --version           output version"
@@ -81,11 +80,6 @@ while true; do
       shift
       ;;
 
-    -r|--run)
-      RUN=1
-      shift
-      ;;
-
     *)
       {
         echo "unknown option \`$arg'"
@@ -96,27 +90,11 @@ while true; do
   esac
 done
 
-
-
-if [ "1" = "$USE_SCRIPT" ]; then
-  "${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -1 | {
-    while read -r n; do
-      printf "%1.f\n" `echo "$n * 100" | bc`
-      sleep .5
-    done
-  };
-else
-  if ! command -v umq >/dev/null 2>&1; then
-    {
-      echo "umq not found!"
-    } >&2;
-    exit 1
-  fi
-  export USE_SCRIPT=1
-  echo "$0"
-  umq recv "$port" "$VERBOSE" -f "$0"
-fi
-
-
+"${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -1 | {
+  while read -r n; do
+    printf "%1.f\n" `echo "$n * 100" | bc`
+    sleep .5
+  done
+};
 
 exit $?
