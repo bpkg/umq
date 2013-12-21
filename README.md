@@ -1,6 +1,8 @@
 umq
 =====
 
+tcp/udp message pushing and receiving in bash
+
 ## install
 
 ```sh
