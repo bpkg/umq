@@ -126,12 +126,16 @@ done
 
 opts=""
 
-if [ "1" != "$SINGLE" ]; then
-  opts="$opts -k "
+if [ "$host" != "$port" ]; then
+  args="$opts"
+  cmd="nc $host $port $args"
+else
+  if [ "1" != "$SINGLE" ]; then
+    opts="$opts -k "
+  fi
+  args="$opts-l $port"
+  cmd="nc $args"
 fi
-
-args="$opts-l $port"
-cmd="nc $args"
 
 verbose "args: $args"
 
@@ -141,30 +145,56 @@ if [ ! -z "$FILE" ]; then
   fi
 fi
 
-pipe="$TMPDIR/_nc_fifo.$host.$port"
-rm -f "$pipe"
-mkfifo "$pipe"
+if [ -z "$port" ]; then
+  MAKEPIPE=1
 
-cmd="nc $args"
+  pipe="$TMPDIR/_nc_fifo.$host.$port"
+  rm -f "$pipe"
+  mkfifo "$pipe"
 
-verbose "pipe: $pipe"
+  verbose "pipe: $pipe"
+else
+  MAKEPIPE=0
+fi
+
 verbose "port: $port"
 verbose "cmd: $cmd"
 
-while test -p "$pipe"; do cat $pipe; echo; done | $cmd | {
-  trap "echo exit; rm -f $pipe; exit" SIGINT SIGTERM
+{
+  echo
+  if [ "1" = "$MAKEPIPE" ]; then
+    while test -p "$pipe"; do
+      cat $pipe;
+    done | $cmd | {
+      trap "echo exit; rm -f $pipe; exit" SIGINT SIGTERM
 
-  while read -r line; do
-    if [ ! -z "$FILE" ]; then
-      ret=`echo "$line" | CHUNK="$line" "$FILE"`
-    else
-      ret="$line"
-    fi
+      while read -r line; do
+        if [ ! -z "$FILE" ]; then
+          chunk=`echo "$line" | CHUNK="$line" "$FILE"`
+        else
+          chunk="$line"
+        fi
 
-    echo "$ret" >$pipe
-    echo "$ret"
-  done
+        printf "%s\n" "$chunk"
+
+        if [ "1" = "$MAKEPIPE" ]; then
+          printf "%s\n" "$chunk" >$pipe
+        fi
+      done
+    }
+  else
+    while true; do
+      while read -r chunk; do
+        if [ "" != "$chunk" ]; then
+          echo "$chunk"
+        fi
+        $cmd
+      done < <($cmd)
+    done
+  fi
+
 }
+
 
 rm -f "$pipe"
 exit $?
