@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CMD="$1"
 CMD_PATH="`which umq-$CMD`"

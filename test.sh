@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export EXPECTED="beep"
 export HOST="localhost"
@@ -14,7 +14,7 @@ throw () {
   exit 1;
 }
 
-export -f throw
+export throw
 
 ./test/recv.sh &
 test_recv_pid=$!
