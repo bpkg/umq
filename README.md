@@ -53,7 +53,7 @@ options:
 
 ## example
 
-Using `umq` with (histo)[https://github.com/visionmedia/histo] allows
+Using `umq` with [histo](https://github.com/visionmedia/histo) allows
 for data to be streamed via tcp to a histo chart
 
 **histo-server.sh**
