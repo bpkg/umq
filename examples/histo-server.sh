@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 umq recv "$1" "$2" | {
   # init view

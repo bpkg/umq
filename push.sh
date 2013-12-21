@@ -110,7 +110,12 @@ fi
 while read -r line; do
   verbose "push: '%s'" "$line"
   echo "$line" | {
-    nc "$host" "$port"
+    nc "$host" "$port" | {
+      while read -r chunk; do
+        echo "$chunk"
+      done
+    };
+
     if [ "1" = "$?" ]; then
       throw "Failed to connect to '$host:$port'"
     fi
