@@ -3,6 +3,10 @@
 # server
 $UMQ_RECV "$PORT" -s | {
   while read -r line; do
+    if [ "" = "$line" ]; then
+      continue
+    fi
+
     echo "got: $line"
     echo "expected: $EXPECTED"
 

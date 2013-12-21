@@ -112,7 +112,9 @@ while read -r line; do
   echo "$line" | {
     nc "$host" "$port" | {
       while read chunk; do
-        echo "$chunk"
+        if [ "" != "$chunk" ]; then
+          echo "$chunk"
+        fi
       done
     };
 

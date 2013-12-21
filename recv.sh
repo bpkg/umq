@@ -145,7 +145,7 @@ if [ ! -z "$FILE" ]; then
   fi
 fi
 
-if [ -z "$port" ]; then
+if [ "$host" = "$port" ]; then
   MAKEPIPE=1
 
   pipe="$TMPDIR/_nc_fifo.$host.$port"
@@ -175,21 +175,26 @@ verbose "cmd: $cmd"
           chunk="$line"
         fi
 
-        printf "%s\n" "$chunk"
-
-        if [ "1" = "$MAKEPIPE" ]; then
-          printf "%s\n" "$chunk" >$pipe
+        if [ "" != "$chunk" ]; then
+          echo "$chunk"
+          if [ "1" = "$MAKEPIPE" ]; then
+            printf "%s\n" "$chunk" >$pipe
+          fi
         fi
       done
     }
   else
     while true; do
       while read -r chunk; do
+        if [ ! -z "$FILE" ]; then
+          chunk=`echo "$chunk" | CHUNK="$chunk" "$FILE"`
+        fi
+
         if [ "" != "$chunk" ]; then
           echo "$chunk"
         fi
         $cmd
-      done < <($cmd)
+      done < <(echo | $cmd)
     done
   fi
 
