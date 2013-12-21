@@ -1,6 +1,6 @@
 #!/bin/bash
 
-umq recv "$1" "$2" | {
+umq recv "$1" | {
   # init view
   echo 0
   while read -r chunk; do
