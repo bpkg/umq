@@ -44,6 +44,7 @@ usage () {
       while read -r ch; do echo \"\$ch\"; done"
     echo
     echo "options:"
+    echo "  -f, --file <file>       file to execute on each chunk received"
     echo "  -s, --single            close after first connection"
     echo "  -h, --help              display this message"
     echo "  -V, --version           output version"
@@ -58,6 +59,9 @@ fi
 if [ "${1:0:1}" != "-" ]; then
   port="$1"
   shift
+else
+  port="$host"
+  host="localhost"
 fi
 
 while true; do
@@ -73,6 +77,11 @@ while true; do
   fi
 
   case $arg in
+    -f|--file)
+      FILE="$2"
+      shift 2
+      ;;
+
     -s|--single)
       SINGLE=1
       shift
@@ -112,9 +121,30 @@ fi
 args="$opts-l $port"
 cmd="nc $args"
 
-nc $args | {
-  while read -r line; do
-    echo "$line"
-  done
-};
+if [ ! -z "$FILE" ]; then
+  if ! test -f "$FILE"; then
+    throw "'$FILE' doesn't exist"
+  fi
+fi
 
+pipe="$TMPDIR/_nc_fifo.$host.$port"
+rm -f "$pipe"
+mkfifo -m 0766 "$pipe"
+
+while true; do cat $pipe; done | nc $args | {
+  trap "echo exit; rm -f $pipe; exit" SIGINT SIGTERM
+
+  while read -r line; do
+    if [ ! -z "$FILE" ]; then
+      ret=`echo "$line" | CHUNK="$line" "$FILE"`
+    else
+      ret="$line"
+    fi
+
+    echo "$ret" >$pipe
+    echo "$ret"
+  done
+}
+
+rm -f "$pipe"
+exit $?
