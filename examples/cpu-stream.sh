@@ -90,7 +90,7 @@ while true; do
   esac
 done
 
-"${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -2 | {
+"${PS}" -eo "${column}" | sort -r -k2 | tail -n +2 | grep "${user}" | grep "${filter}" | head -1 | {
   while read -r n; do
     case "$n" in
       **[0-9]**)
