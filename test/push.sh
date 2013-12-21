@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "$EXPECTED" | umq push "$HOST" "$PORT"
+echo "$EXPECTED" | $UMQ_PUSH "$HOST" "$PORT"
 
 if [ "0" != "$?" ]; then
   echo "recv: umq connect error"

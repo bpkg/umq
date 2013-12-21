@@ -16,7 +16,7 @@ fi
 
 throw () {
   {
-    printf "error: "
+    printf "push: error: "
     echo "$@"
   } >&$STDERR
 
@@ -29,7 +29,7 @@ version () {
 
 verbose () {
   if [ "1" = "$VERBOSE" ]; then
-    printf "verbose: "
+    printf "push: verbose: "
     printf "$@"
     printf "\n"
   fi
@@ -111,7 +111,7 @@ while read -r line; do
   verbose "push: '%s'" "$line"
   echo "$line" | {
     nc "$host" "$port" | {
-      while read -r chunk; do
+      while read chunk; do
         echo "$chunk"
       done
     };

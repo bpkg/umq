@@ -7,6 +7,10 @@ STDIN=0
 STDOUT=1
 STDERR=2
 
+if [ -z "$TMPDIR" ]; then
+  TMPDIR="/tmp"
+fi
+
 if [ -t 0 ]; then
   ISATTY=1
 else
@@ -15,7 +19,7 @@ fi
 
 throw () {
   {
-    printf "error: "
+    printf "recv: error: "
     echo "$@"
   } >&$STDERR
 
@@ -24,7 +28,7 @@ throw () {
 
 verbose () {
   if [ "1" = "$VERBOSE" ]; then
-    printf "verbose: "
+    printf "recv: verbose: "
     printf "$@"
     printf "\n"
   fi
@@ -61,7 +65,10 @@ if [ "${1:0:1}" != "-" ]; then
   shift
 else
   port="$host"
-  host="localhost"
+fi
+
+if [ -z "$host" ]; then
+  host=""
 fi
 
 while true; do
@@ -121,6 +128,8 @@ fi
 args="$opts-l $port"
 cmd="nc $args"
 
+verbose "args: $args"
+
 if [ ! -z "$FILE" ]; then
   if ! test -f "$FILE"; then
     throw "'$FILE' doesn't exist"
@@ -129,9 +138,15 @@ fi
 
 pipe="$TMPDIR/_nc_fifo.$host.$port"
 rm -f "$pipe"
-mkfifo -m 0766 "$pipe"
+mkfifo "$pipe"
 
-while true; do cat $pipe; done | nc $args | {
+cmd="nc $args"
+
+verbose "pipe: $pipe"
+verbose "port: $port"
+verbose "cmd: $cmd"
+
+while test -p "$pipe"; do cat $pipe; echo; done | $cmd | {
   trap "echo exit; rm -f $pipe; exit" SIGINT SIGTERM
 
   while read -r line; do

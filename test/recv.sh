@@ -1,15 +1,7 @@
 #!/bin/bash
 
-SELF="$0"
-
-die () {
-  local pid="`ps awx | grep \"$SELF\" | awk '{ print $1; exit }'`"
-  echo "$pid"
-  kill -9 "$pid"
-}
-
 # server
-umq recv "$HOST" "$PORT" -s -v | {
+$UMQ_RECV "$PORT" -s | {
   while read -r line; do
     echo "got: $line"
     echo "expected: $EXPECTED"
