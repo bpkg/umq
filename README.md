@@ -6,6 +6,8 @@ tcp/udp message pushing and receiving in bash
 ## install
 
 ```sh
+$ make
+$ make check
 $ make install
 ```
 

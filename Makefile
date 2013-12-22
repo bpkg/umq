@@ -40,6 +40,7 @@ clean:
 	rm -f $(BIN)
 	$(foreach bin,$(BINS),$(shell rm -f umq-$(bin)))
 
+check: test
 test:
 	./test.sh
 
