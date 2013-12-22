@@ -16,7 +16,7 @@ $ make install
 ```sh
 $ umq recv localhost 3000 | { \
   while read -r line; do \
-    printf "got: '%s\n"; \
+    echo "got: '$line'"; \
   done; \
 }
 ```
