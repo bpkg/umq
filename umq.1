@@ -45,21 +45,92 @@
 .
 .SH "USAGE"
 .
-.SS "RECEIVING"
-\fB
-$ umq recv localhost 3000 | { \\
-  while read \-r line; do \\
-    printf "got: \'%s\\n"; \\
-  done; \\
-}\fR
-.
-.SS "PUSHING"
-\fB
-$ echo "ping" | umq push localhost 3000\fR
+.SS "SERVER"
+  Listening on localhost can be achieved by simple providing a port:
 .
 .P
-\fB
-got: \'ping\'\fR
+  \fB
+  $ umq recv 3000 | { \\
+    while read \-r line; do \\
+      echo "got: \'$line\'"; \\
+        done; \\
+  }
+  \fR
+.
+.P
+  This will create a server and listen on localhost port \fB3000\fR for all
+  incoming tcp/udp messages\.
+.
+.SS "CONNECTING"
+  You can connect and read from the server by using \fBumq recv\fR with a host
+  and port:
+.
+.P
+  \fB$ umq recv localhost 3000\fR
+.
+.SS "PUSHING"
+  Pushing data to a umq receiver can be performed via \fBumq push\fR:
+.
+.P
+  \fB$ echo "ping" | umq push localhost 3000\fR
+.
+.P
+  This should yield the following response on the server:
+.
+.P
+  \fBgot: \'ping\'\fR
+.
+.SH "CAVEATS"
+  When multiple peers are connected via \fBumq recv <host> <port>\fR to a single
+  umq receiver, messages are emitted to each peer via the RR (Round\-Robin)
+.
+.SS "SERVER"
+  \fB
+  $ umq recv 3000 | while read \-r chunk; do echo "chunk: $chunk"; done
+  chunk:
+  chunk: 0
+  chunk: 1
+  chunk: 2
+  chunk: 3
+  chunk: 4
+  chunk: 5
+  chunk: 6
+  chunk: 7
+  chunk: 8
+  chunk: 9
+  chunk: 10
+  chunk: 11
+  \fR
+.
+.SS "PUSHER"
+  \fB
+  $ i=0 while true; do echo echo "$i"; ((++i)); sleep \.5; done | \\
+    umq push localhost 3000
+  \fR
+.
+.SS "PEER 1"
+  \fB\fR`
+  $ umq recv localhost 3000
+.
+.P
+  2
+  3
+  4
+  5
+  8
+  9
+  10
+  11
+  \fB\fR`
+.
+.SS "PEER 2"
+  \fB\fR`
+  $ umq recv localhost 3000
+.
+.P
+  6
+  7
+  \fB\fR`
 .
 .SH "AUTHOR"
 .
