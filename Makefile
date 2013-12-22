@@ -1,7 +1,7 @@
 
 BIN = umq
 BINS = push recv help
-EXAMPLES = cpu-stream histo-server
+EXAMPLES = wall-server histo-server
 PREFIX ?= /usr/local
 MANPREFIX ?= $(PREFIX)/share/man/man1
 
@@ -32,6 +32,9 @@ examples: $(EXAMPLES)
 
 $(EXAMPLES):
 	install examples/$@.sh $(PREFIX)/bin/$@
+
+cpu-stream:
+	@./umq-recv 9999 -f ./examples/cpu-stream.sh -v
 
 clean:
 	rm -f $(BIN)
