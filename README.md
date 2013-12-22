@@ -25,7 +25,7 @@ $ umq recv 3000 | { \
 }
 ```
 
-This will create a server and listen on localhost port `3000` for all incoming tcp/udp messages.
+This will create a server and listen on localhost port `3000` for all incoming tcp messages.
 
 **connecting**
 
