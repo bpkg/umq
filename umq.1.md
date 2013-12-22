@@ -1,4 +1,4 @@
-umq(1) -- tcp/udp message transport utility
+umq(1) -- tcp message transport utility
 =================================
 
 ## SYNOPSIS
@@ -51,7 +51,7 @@ umq(1) -- tcp/udp message transport utility
   ```
 
   This will create a server and listen on localhost port `3000` for all
-  incoming tcp/udp messages.
+  incoming tcp messages.
 
 ### CONNECTING
 
