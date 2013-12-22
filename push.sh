@@ -116,7 +116,7 @@ while read -r line; do
           echo "$chunk"
         fi
       done
-    };
+    } >$NULL
 
     if [ "1" = "$?" ]; then
       throw "Failed to connect to '$host:$port'"
