@@ -69,7 +69,6 @@ fi
 
 if [ -z "$port" ]; then
   port="$host"
-  shift
 fi
 
 if [ -z "$host" ]; then
