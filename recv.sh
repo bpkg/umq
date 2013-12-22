@@ -39,7 +39,7 @@ version () {
 }
 
 usage () {
-  echo "usage: umq recv <host> <port> [-hV] "
+  echo "usage: umq recv <host> <port> [-hsvV] [-f <file>]"
 
   if [ "$1" = "1" ]; then
     echo
@@ -50,6 +50,7 @@ usage () {
     echo "options:"
     echo "  -f, --file <file>       file to execute on each chunk received"
     echo "  -s, --single            close after first connection"
+    echo "  -v, --verbose           show verbose output"
     echo "  -h, --help              display this message"
     echo "  -V, --version           output version"
   fi
@@ -198,7 +199,6 @@ verbose "cmd: $cmd"
   fi
 
 }
-
 
 rm -f "$pipe"
 exit $?

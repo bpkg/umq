@@ -1,6 +1,7 @@
 
 BIN = umq
 BINS = push recv help
+EXAMPLES = cpu-stream histo-server
 PREFIX ?= /usr/local
 MANPREFIX ?= $(PREFIX)/share/man/man1
 
@@ -24,6 +25,13 @@ uninstall: clean
 	$(foreach bin,$(BINS),$(shell rm -f $(PREFIX)/bin/umq-$(bin)))
 	@echo "  -doc"
 	$(foreach bin,$(BINS),$(shell rm -f $(MAXPREFIX)/umq-$(bin).1))
+	@echo "  -examples"
+	$(foreach bin,$(BINS),$(shell rm -f $(PREFIX)/bin/$(bin)))
+
+examples: $(EXAMPLES)
+
+$(EXAMPLES):
+	install examples/$@.sh $(PREFIX)/bin/$@
 
 clean:
 	rm -f $(BIN)

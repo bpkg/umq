@@ -3,11 +3,12 @@ umq-recv(1) -- tcp/udp listen transport utility
 
 ## SYNOPSIS
 
-`umq-recv <host> <port>` [-hvV] [-f <file>]
+`umq-recv <host> <port>` [-hsvV] [-f <file>]
 
 ## OPTIONS
 
   `-f, --file` <file>       file to execute on each chunk received
+  `-s, --single`            close after first connection
   `-v, --verbose`           show verbose output
   `-h, --help`              display this message
   `-V, --version`           output version
