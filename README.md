@@ -1,7 +1,7 @@
 umq
 =====
 
-tcp/udp message pushing and receiving in bash
+tcp message pushing and receiving in bash
 
 ## install
 
