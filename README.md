@@ -51,72 +51,20 @@ options:
   -V, --version           output version
 ```
 
-## example
+## examples
+
+### cpu histogram
 
 Using `umq` with [histo](https://github.com/visionmedia/histo) allows
 for data to be streamed via tcp to a histo chart
 
-**histo-server.sh**
+See [cpu-stream](https://gist.github.com/jwerle/8076956) for a preview.
 
-```sh
-#!/bin/sh
+### wall server
 
-umq recv "$1" "$2" | {
-  # init view
-  echo 0
-  while read -r chunk; do
-    # emit chunk
-    echo "$chunk"
-  done
-  exit 0
-} | histo;
+Streaming messages to `wall`.
 
-exit $?;
-```
-
-Start the histo server:
-
-```sh
-$ ./histo-server localhost 3000
-```
-
-Stream data to it:
-
-```sh
-while true; do
-  echo $RANDOM
-  sleep .5
-done | umq push localhost 3000
-```
-
-Which renders a view like this:
-
-```sh
-                █
- 2000 ․         █
-                █
- 1826 ․         █
-                █
- 1652 ․         █
-                █
- 1478 ․         █
-                █
- 1304 ․         █
-                █
- 1130 ․         █
-            █   █
-  957 ․     █   █
-            █   █
-  783 ․     █   █
-            █   █
-  609 ․     █   █
-            █   █
-  435 ․     █   █
-            █   █
-  261 ․     █   █
-            █   █
-   87 ․     █   █
-```
+See [wall-server](https://github.com/jwerle/umq/blob/master/examples/wall-server.sh).
 
 ## license
 
