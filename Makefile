@@ -11,7 +11,7 @@ $(BIN): clean $(BINS)
 $(BINS):
 	ln -s $@.sh umq-$@
 
-install:
+install: $(BIN)
 	@echo "  +bin"
 	@install $(BIN) $(PREFIX)/bin
 	$(foreach bin,$(BINS),$(shell install umq-$(bin) $(PREFIX)/bin/umq-$(bin)))
