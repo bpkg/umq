@@ -1,0 +1,7 @@
+{
+  "name": "umq",
+  "version": "0.0.1",
+  "description": "tcp message pushing and receiving in bash",
+  "scripts": [ "umq.sh", "recv.sh", "push.sh", "help.sh" ],
+  "install": "make install"
+}
