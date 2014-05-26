@@ -5,6 +5,12 @@ tcp message pushing and receiving in bash
 
 ## install
 
+[bpkg](https://github.com/bpkg/bpkg)
+
+```sh
+$ bpkg install umq -g
+```
+
 ```sh
 $ make
 $ make check
